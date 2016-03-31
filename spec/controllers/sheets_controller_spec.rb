@@ -18,7 +18,7 @@ RSpec.describe SheetsController, type: :controller do
 
   describe "GET #create" do
     it "returns http success" do
-      get :create
+      get :create, {:sheet => {'blarg'=>'file'}}
       expect(response).to have_http_status(:success)
     end
   end
@@ -29,5 +29,4 @@ RSpec.describe SheetsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
-
 end
