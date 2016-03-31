@@ -1,3 +1,8 @@
+<% if !flash[:notice].blank? %>
+   <div class = "alert alert-info">
+      <%= flash[:notice] %>
+   </div>
+<% end %>
 <% if !@sheet.errors.empty? %>
    <div class = "alert alert-error">
       
