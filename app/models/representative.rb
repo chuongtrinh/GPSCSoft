@@ -2,7 +2,8 @@ class Representative < ActiveRecord::Base
     belongs_to :department
     
      def self.uploadFile(file)
-  allowed_attributes = [ :uin,:name]
+    allowed_attributes = [ :uin,:name]
+ 
   spreadsheet = open_spreadsheet(file)
   header = spreadsheet.row(1)
   (2..spreadsheet.last_row).each do |i|
