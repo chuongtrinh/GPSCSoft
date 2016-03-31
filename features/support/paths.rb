@@ -14,8 +14,10 @@ module NavigationHelpers
     case page_name
 
     when /^the home\s?page$/
-      '/'
-
+      '/sheets'
+    when /^the GPSC home page/
+      '/sheets'
+      
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
