@@ -11,10 +11,12 @@ class SheetsController < ApplicationController
    def create
       @sheet = Sheet.new(sheet_params)
       
-      if @sheet[:attachment]
+      if params[:sheet][:attachment]
          if @sheet.save
             Representative.uploadFile(params[:sheet][:attachment])
             redirect_to sheets_path, notice: "The sheet #{@sheet.name} has been uploaded."
+         else
+            render "new"
          end
       else
          flash[:notice] = "#{@sheet.name} was created unsuccessfully (Missing upload file)"
