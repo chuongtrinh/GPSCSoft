@@ -1,15 +1,15 @@
 require "spec_helper"
 describe Department do
-    it "is named software" do
+    it "college is science" do
         department = Department.new
-        department.name = "pancho"
-        expect(department.name).to eq("pancho")
+        department.college = "science"
+        expect(department.college).to eq("science")
     end
     
-    it "is assigned to id 123" do
+    it "academic_unit_name is biology" do
         department = Department.new
-        department.department_id = "123"
-        expect(department.department_id).to eq("123")
+        department.academic_unit_name = "biology"
+        expect(department.academic_unit_name).to eq("biology")
     end
     
     it "is assigned to state 1" do
@@ -22,7 +22,7 @@ describe Department do
         def save_department(department)
             "saved!" if department.save
         end
-        @department = Department.new(:name => "pancho", :state => 1, :department_id => "123")
+        @department = Department.new(:college => "science", :state => 1, :academic_unit_name => "biology")
         @department.save!
         expect(save_department(@department)).to eq("saved!")
     end
