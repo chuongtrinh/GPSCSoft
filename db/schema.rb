@@ -11,21 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160327015432) do
+ActiveRecord::Schema.define(version: 20160404214023) do
 
   create_table "departments", force: :cascade do |t|
-    t.string   "name"
     t.integer  "state"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "department_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "academic_unit_name"
+    t.string   "college"
   end
 
   create_table "representatives", force: :cascade do |t|
     t.string   "uin"
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "last_name"
+    t.string   "first_name"
+    t.string   "email"
+    t.integer  "department_id"
   end
 
   create_table "sheets", force: :cascade do |t|
