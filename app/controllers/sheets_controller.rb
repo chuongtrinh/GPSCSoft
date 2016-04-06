@@ -13,7 +13,7 @@ class SheetsController < ApplicationController
       
       if params[:sheet][:attachment]
          if @sheet.save
-            Representative.uploadFile(params[:sheet][:attachment])
+            uploadFile(params[:sheet][:attachment])
             redirect_to sheets_path, notice: "The sheet #{@sheet.name} has been uploaded."
          else
             render "new"
@@ -37,6 +37,30 @@ class SheetsController < ApplicationController
             else raise "Unknown file type: #{file.original_filename}"
         end
     end
+   #------------------------------------------------i'm working here------------------
+   def uploadFile(file)
+         head={"FIRST NAME" => "first_name",
+               "LAST NAME"  => "last_name",
+               "EMAIL"      => "email",
+               "UIN"        => "uin"}
+         model = Representative
+         spreadsheet = SheetsController.open_spreadsheet(file)
+         header = spreadsheet.row(1)
+         arranged_header=[]
+         #getting an array with the titles used on data base
+         header.each do |k|
+              arranged_header.push head[k]
+         end
+         
+         (2..spreadsheet.last_row).each do |i|
+           row = Hash[[arranged_header, spreadsheet.row(i)].transpose]
+           instance = model.find_by_id(row["id"]) || Representative.new
+           instance.attributes = row.to_hash.slice(*Representative.attribute_names())
+           instance.save!
+         end
+    end 
+   #----------------------------------------------------------------------------------
+   
    private
       def sheet_params
          params.require(:sheet).permit(:name, :attachment)
