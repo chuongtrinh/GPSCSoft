@@ -13,8 +13,12 @@ class SheetsController < ApplicationController
       
       if params[:sheet][:attachment]
          if @sheet.save
-            uploadFile(params[:sheet][:attachment])
+            if uploadFile(params[:sheet][:attachment])
             redirect_to sheets_path, notice: "The sheet #{@sheet.name} has been uploaded."
+         else
+            flash[:notice] = "#{@sheet.name} was created unsuccessfully (The file you uploaded is empty)"
+            render "new"
+         end
          else
             render "new"
          end
@@ -45,6 +49,9 @@ class SheetsController < ApplicationController
                "UIN"        => "uin"}
          model = Representative
          spreadsheet = SheetsController.open_spreadsheet(file)
+         if !spreadsheet.first_row
+            return nil
+         end
          header = spreadsheet.row(1)
          arranged_header=[]
          #getting an array with the titles used on data base
