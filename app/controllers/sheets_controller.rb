@@ -14,16 +14,16 @@ class SheetsController < ApplicationController
       if params[:sheet][:attachment]
          if @sheet.save
             if uploadFile(params[:sheet][:attachment])
-            redirect_to sheets_path, notice: "The sheet #{@sheet.name} has been uploaded."
-         else
-            flash[:notice] = "#{@sheet.name} was created unsuccessfully (The file you uploaded is empty)"
-            render "new"
-         end
+               redirect_to sheets_path, notice: "The sheet has been uploaded."
+            else
+               flash[:notice] = "The sheet was created unsuccessfully (The file you uploaded is empty)"
+               render "new"
+            end
          else
             render "new"
          end
       else
-         flash[:notice] = "#{@sheet.name} was created unsuccessfully (Missing upload file)"
+         flash[:notice] = "The sheet was created unsuccessfully (Missing upload file)"
          render "new"
       end    
        
@@ -47,7 +47,6 @@ class SheetsController < ApplicationController
                "LAST NAME"  => "last_name",
                "EMAIL"      => "email",
                "UIN"        => "uin"}
-         model = Representative
          spreadsheet = SheetsController.open_spreadsheet(file)
          if !spreadsheet.first_row
             return nil
@@ -61,7 +60,7 @@ class SheetsController < ApplicationController
          
          (2..spreadsheet.last_row).each do |i|
            row = Hash[[arranged_header, spreadsheet.row(i)].transpose]
-           instance = model.find_by_id(row["id"]) || Representative.new
+           instance = Representative.find_by_first_name(row["first_name"]) && Representative.find_by_last_name(row["last_name"]) || Representative.new
            instance.attributes = row.to_hash.slice(*Representative.attribute_names())
            instance.save!
          end
