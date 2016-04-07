@@ -34,6 +34,7 @@ class SheetsController < ApplicationController
       @sheet.destroy
       redirect_to sheets_path, notice:  "The sheet #{@sheet.name} has been deleted."
    end
+   
    def self.open_spreadsheet(file)
       case File.extname(file.original_filename)
          when ".xls" then Roo::Excel.new(file.path)
@@ -41,6 +42,7 @@ class SheetsController < ApplicationController
             else raise "Unknown file type: #{file.original_filename}"
         end
     end
+    
    #------------------------------------------------i'm working here------------------
    def uploadFile(file)
          head={"FIRST NAME" => "first_name",
