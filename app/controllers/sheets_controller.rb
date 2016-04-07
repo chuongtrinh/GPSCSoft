@@ -9,24 +9,24 @@ class SheetsController < ApplicationController
    end
    
    def create
-      @sheet = Sheet.new(sheet_params)
-      
-      if params[:sheet][:attachment]
-         if @sheet.save
-            if uploadFile(params[:sheet][:attachment])
-               redirect_to sheets_path, notice: "The sheet has been uploaded."
-            else
-               flash[:notice] = "The sheet was created unsuccessfully (The file you uploaded is empty)"
-               render "new"
-            end
+         if params.has_key?(:sheet)
+            @sheet = Sheet.new(sheet_params)
+               if @sheet.save
+                  if uploadFile(params[:sheet][:attachment])
+                     redirect_to sheets_path, notice: "The sheet has been uploaded."
+                  else
+                     flash[:notice] = "The sheet was created unsuccessfully (The file you uploaded is empty)"
+                     render "new"
+                  end
+               else
+                  render "new"
+               end
          else
+            @sheet = Sheet.new
+            flash[:notice] = "The sheet was created unsuccessfully (Missing upload file)"
+            print params
             render "new"
          end
-      else
-         flash[:notice] = "The sheet was created unsuccessfully (Missing upload file)"
-         render "new"
-      end    
-       
    end
    
    def destroy
@@ -68,7 +68,7 @@ class SheetsController < ApplicationController
    #----------------------------------------------------------------------------------
    
    private
-      def sheet_params
-         params.require(:sheet).permit(:name, :attachment)
-      end
+   def sheet_params
+      params.require(:sheet).permit(:attachment)
+   end
 end
