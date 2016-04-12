@@ -40,37 +40,44 @@ class SheetsController < ApplicationController
          when ".xls" then Roo::Excel.new(file.path)
             when ".xlsx" then Roo::Excelx.new(file.path)
             else raise "Unknown file type: #{file.original_filename}"
-        end
-    end
+      end
+   end
     
-   #------------------------------------------------i'm working here------------------
    def uploadFile(file)
-         head={"FIRST NAME" => "first_name",
-               "LAST NAME"  => "last_name",
-               "EMAIL"      => "email",
-               "UIN"        => "uin"}
          spreadsheet = SheetsController.open_spreadsheet(file)
-         if !spreadsheet.first_row
+         if is_empty spreadsheet
             return nil
          end
          header = spreadsheet.row(1)
-         arranged_header=[]
-         #getting an array with the titles used on data base
-         header.each do |k|
-              arranged_header.push head[k]
-         end
+         arranged_header=arrange_representative_header header
          
          (2..spreadsheet.last_row).each do |i|
            row = Hash[[arranged_header, spreadsheet.row(i)].transpose]
-           instance = Representative.find_by_first_name(row["first_name"]) && Representative.find_by_last_name(row["last_name"]) || Representative.new
-           instance.attributes = row.to_hash.slice(*Representative.attribute_names())
-           instance.save!
+           RepresentativeController.update_representative row
          end
-    end 
-   #----------------------------------------------------------------------------------
-   
+   end 
+
+
    private
    def sheet_params
       params.require(:sheet).permit(:attachment)
    end
+   
+   #getting an array with the titles used on data base for representative
+   def arrange_representative_header header
+      head={"FIRST NAME" => "first_name",
+               "LAST NAME"  => "last_name",
+               "EMAIL"      => "email",
+               "UIN"        => "uin"}
+      arranged_header=[]
+         header.each do |k|
+              arranged_header.push head[k]
+         end
+      return arranged_header
+   end
+   
+   def is_empty spreadsheet
+      return !spreadsheet.first_row
+   end
+   
 end
