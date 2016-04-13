@@ -5,7 +5,7 @@ class ModifyRepresentativeModel < ActiveRecord::Migration
     add_column :representatives, :last_name, :string
     add_column :representatives, :first_name, :string
     add_column :representatives, :email, :string
-    add_reference :representatives,:department, foreign_key: true
+    add_reference :representatives,:department, foreign_key: true, index: true
 
   end
 end

@@ -1,7 +1,15 @@
 class SheetsController < ApplicationController
    def index
+      
+  	#  @d1={:academic_unit_name => 'Performance Studies', :college => 'Liberal Arts', :state => '1'}
+   #  Department.create!(@d1)
+
+
       @sheets = Sheet.all
       @representatives=Representative.all
+      @departments=Department.all
+
+
    end
    
    def new
@@ -53,6 +61,8 @@ class SheetsController < ApplicationController
          
          (2..spreadsheet.last_row).each do |i|
            row = Hash[[arranged_header, spreadsheet.row(i)].transpose]
+           puts row
+           DepartmentController.update_department row
            RepresentativeController.update_representative row
          end
    end 
@@ -68,7 +78,10 @@ class SheetsController < ApplicationController
       head={"FIRST NAME" => "first_name",
                "LAST NAME"  => "last_name",
                "EMAIL"      => "email",
-               "UIN"        => "uin"}
+               "UIN"        => "uin",
+               "FULL ACADEMIC UNIT NAME"        => "academic_unit_name",
+               "COLLEGE"        => "college"
+            }
       arranged_header=[]
          header.each do |k|
               arranged_header.push head[k]

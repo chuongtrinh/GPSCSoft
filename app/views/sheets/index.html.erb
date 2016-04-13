@@ -41,6 +41,7 @@
     <th>last name</th>
     <th>uin</th>
     <th>email</th>
+    <th>department_id</th>
   </tr>          
 <% @representatives.each do |representative| %>
   <tr>
@@ -48,5 +49,18 @@
     <td><%= representative.last_name %></td>
     <td><%= representative.uin %></td>
     <td><%= representative.email %></td>
+    <td><%= representative.department_id %></td>
+  </tr>
+<% end %>
+
+ <table id="department">
+  <tr>
+    <th>name</th>
+    <th>department_id</th>
+  </tr>          
+<% @departments.each do |d| %>
+  <tr>
+    <td><%= d.academic_unit_name %></td>
+    <td><%= d.id %></td>
   </tr>
 <% end %>
