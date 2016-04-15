@@ -47,7 +47,6 @@ class SheetsController < ApplicationController
       case File.extname(file.original_filename)
          when ".xls" then Roo::Excel.new(file.path)
             when ".xlsx" then Roo::Excelx.new(file.path)
-               when ".csv" then Roo::Csv.new(file.path)
             else raise "Unknown file type: #{file.original_filename}"
       end
    end
@@ -61,29 +60,11 @@ class SheetsController < ApplicationController
          arranged_header=arrange_representative_header header
          
          
-         # This should be called after determining the type of sheet file 
-         # This should belong to attendance sheet
+         # this should be called after determining the type of sheet file 
+         # This should belong to attendance
          if (validate_attendance_sheet(2..spreadsheet.last_row))
             redirect_to sheets_path, notice: "One or more entries' names in swipe card sheet are missing"
          end
-         
-         
-         all_department_states = {}
-         # initialize all states 
-         Department.all.each do |entry|
-            all_department_states[entry.id] = 0
-         end
-         
-         # update the states in temporary states table
-          (2..spreadsheet.last_row).each do |i| 
-            update_states_table(row,all_department_states)
-          end
-          
-         # update the Department model
-         update_state(all_department_states)
-   
-          
-          
          
          (2..spreadsheet.last_row).each do |i|
            row = Hash[[arranged_header, spreadsheet.row(i)].transpose]
@@ -105,51 +86,28 @@ class SheetsController < ApplicationController
          end
       end
    end
-   def update_states_table(row, all_department_states)
+   def update_state(row)
       
       # all representatives here should be considered as attendance
       
-      @representative = Representative.find_by_name(row["Name"])
-      #@department = Department.find_by_id(@representative.department_id);
+      @representative = Representative.find_by_name(row["Name"]);
+      @department = Department.find_by_id(@representative.department_id);
       
-      # update states for attending department
-      all_department_states[@representative.department_id] = 1
-      
-   end
-   def update_state(all_department_states)
-      
-      all_department_states.each do |key,state_val|
-         @department = Department.find_by_id(key);
-         @department.previous_state = @department.current_state
-         case @department.current_state
-            when '1'
-               if state_val == 0
-                  @department.current_state = '2'
-               end
-            when '2'
-               if state_val == 1
-                  @department.current_state = '1'
-               else
-                  @department.current_state = '3'
-               end
-            when '3'
-               if state_val == 1
-                  @department.current_state = '4'
-               end
-            when '4'
-               if state_val == 1
-                  @department.current_state = '1'
-               else
-                  @department.current_state = '3'
-               end
-         end
-      end
-   end
-
-
       # storing the previous state so we can back it 
-      #@department.previous_state = @department.current_state 
-   
+      @department.previous_state = @department.current_state 
+      case @department.current_state   
+      when 1    #compare to 1
+        puts "it was 1" 
+      when 2    #compare to 2
+        puts "it was 2"
+      else
+        puts "it was something else"
+      end
+      
+      
+      
+   end
+
    def find_by_name(name)
         first_name=name.split(' ')[0]
         last_name=name.split(' ')[-1]
