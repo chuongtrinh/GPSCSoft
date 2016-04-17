@@ -21,7 +21,7 @@ class SheetsController < ApplicationController
             @sheet = Sheet.new(sheet_params)
                if @sheet.save
                   if uploadFile(params[:sheet][:attachment])
-                     redirect_to sheets_path, notice: "The sheet has been uploaded."
+                     # redirect_to sheets_path, notice: "The sheet has been uploaded."
                   else
                      flash[:notice] = "The sheet was created unsuccessfully (The file you uploaded is empty)"
                      render "new"
@@ -51,51 +51,74 @@ class SheetsController < ApplicationController
             else raise "Unknown file type: #{file.original_filename}"
       end
    end
-    
+
+   def identify_spreadsheet_type(file)
+      if file.original_filename =~ /^Attendance Swipe Data.\S+$/
+         return '1'
+      elsif file.original_filename =~ /^\S+ GPSC Attendance.\S+$/
+         return '2'
+      else
+         return '3'
+      end
+   end
+   
    def uploadFile(file)
          spreadsheet = SheetsController.open_spreadsheet(file)
          if is_empty spreadsheet
             return nil
          end
+
          header = spreadsheet.row(1)
          arranged_header=arrange_representative_header header
          
+         filetype = identify_spreadsheet_type(file)
+         case filetype
+            # file type is attendance or card swipe
+            when '1'
+                    
+            # This should be called after determining the type of sheet file 
+            # This should belong to attendance sheet
+            if (validate_attendance_sheet(2..spreadsheet.last_row))
+               redirect_to sheets_path, notice: "One or more entries' names in swipe card sheet are missing"
+            end
          
-         # This should be called after determining the type of sheet file 
-         # This should belong to attendance sheet
-         if (validate_attendance_sheet(2..spreadsheet.last_row))
-            redirect_to sheets_path, notice: "One or more entries' names in swipe card sheet are missing"
-         end
          
+            all_department_states = {}
+            # initialize all states 
+            Department.all.each do |entry|
+               all_department_states[entry.id] = 0
+            end
          
-         all_department_states = {}
-         # initialize all states 
-         Department.all.each do |entry|
-            all_department_states[entry.id] = 0
-         end
-         
-         # update the states in temporary states table
-          (2..spreadsheet.last_row).each do |i| 
-            update_states_table(row,all_department_states)
-          end
+            # update the states in temporary states table
+            (2..spreadsheet.last_row).each do |i| 
+               update_states_table(row,all_department_states)
+            end
           
-         # update the Department model
-         update_state(all_department_states)
-   
-          
-          
+            # update the Department model
+            update_state(all_department_states)
+            redirect_to sheet_path, notice: "The attendance sheet has been uploaded."
+            # filetype is registration
+            when '2' 
+
          
-         (2..spreadsheet.last_row).each do |i|
-           row = Hash[[arranged_header, spreadsheet.row(i)].transpose]
+            (2..spreadsheet.last_row).each do |i|
+               row = Hash[[arranged_header, spreadsheet.row(i)].transpose]
            
            
-           # This is 
-           DepartmentController.update_department row
+            # This is 
+            DepartmentController.update_department row
            
-           RepresentativeController.update_representative row
+            RepresentativeController.update_representative row
+            
+            end 
+            redirect_to sheets_path, notice: "The registration sheet has been uploaded."
+            # Invalid file type
+            when '3'
+            flash[:notice] = "The name of the spreadsheet uploaded does not match the system default (Include 'GPSC Attendance' for registration update or 'Attendance Swipe Data' for attendance update)"
+            render "new"
          end
          
-   end 
+   end
    def validate_attendance_sheet(rows)
       # perform checking error 
       # 1. if missing name
