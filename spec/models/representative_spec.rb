@@ -33,4 +33,6 @@ describe Representative do
         expect(save_representative(@representative)).to eq("saved!")
     end
     
+    it "belongs to a department whose academic_unit_name is biology" do
+    end
 end

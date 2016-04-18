@@ -55,12 +55,18 @@
 
  <table id="department">
   <tr>
-    <th>name</th>
     <th>department_id</th>
+    <th>academic_unit_name</th>
+    <th>college</th>
+    <th>current_state</th>
+    <th>previous_state</th>
   </tr>          
 <% @departments.each do |d| %>
   <tr>
-    <td><%= d.academic_unit_name %></td>
     <td><%= d.id %></td>
+    <td><%= d.academic_unit_name %></td>
+    <td><%= d.college %></td>
+    <td><%= d.current_state %></td>
+    <td><%= d.previous_state %></td>
   </tr>
 <% end %>

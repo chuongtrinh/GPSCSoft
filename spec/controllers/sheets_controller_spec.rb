@@ -36,4 +36,8 @@ RSpec.describe SheetsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
+  
+  it "upload representative registration file" do
+  end
+  
 end

@@ -49,7 +49,7 @@ class SheetsController < ApplicationController
       case File.extname(file.original_filename)
          when ".xls" then Roo::Excel.new(file.path)
             when ".xlsx" then Roo::Excelx.new(file.path)
-               when ".csv" then Roo::Csv.new(file.path)
+               when ".csv" then Roo::CSV.new(file.path)
             else raise "Unknown file type: #{file.original_filename}"
       end
    end
@@ -81,7 +81,7 @@ class SheetsController < ApplicationController
             # This should be called after determining the type of sheet file 
             # This should belong to attendance sheet
             
-            if (validate_attendance_sheet(2..spreadsheet.last_row))
+            if (!validate_attendance_sheet(2..spreadsheet.last_row))
                redirect_to sheets_path, notice: "One or more entries' names in swipe card sheet are missing"
             end
          
@@ -94,12 +94,13 @@ class SheetsController < ApplicationController
          
             # update the states in temporary states table
             (2..spreadsheet.last_row).each do |i| 
-               update_states_table(row,all_department_states)
+              
+               update_states_table(spreadsheet.row(i),all_department_states)
             end
           
             # update the Department model
             update_state(all_department_states)
-            redirect_to sheet_path, notice: "The attendance sheet has been uploaded."
+            # redirect_to sheets_path, notice: "The attendance sheet has been uploaded."
             
             # filetype is registration
             when '2' 
@@ -126,21 +127,25 @@ class SheetsController < ApplicationController
       # perform checking error 
       # 1. if missing name
       rows.each do |row|
-         if row['Name'].nil? || row['Name'].empty? || row['Name'].blank?
+         if row[0].nil? || row[0].blank?
             return false
          end
       end
+      return true
    end
    def update_states_table(row, all_department_states)
       
       # all representatives here should be considered as attendance
-      
-      @representative = Representative.find_by_name(row["Name"])
+      @representative = RepresentativeController.find_by_name(row[0])
       #@department = Department.find_by_id(@representative.department_id);
       
       # update states for attending department
-      all_department_states[@representative.department_id] = 1
-      
+      # puts "#{@representative.first_name}  dsds"
+      if @representative.nil? 
+         flash[:notice] = "#{row[0]} is not in the registration sheet"
+      else
+         all_department_states[@representative.department_id] = 1
+      end
    end
    def update_state(all_department_states)
       
@@ -169,6 +174,7 @@ class SheetsController < ApplicationController
                   @department.current_state = '3'
                end
          end
+         @department.save!
       end
    end
 
@@ -176,11 +182,7 @@ class SheetsController < ApplicationController
       # storing the previous state so we can back it 
       #@department.previous_state = @department.current_state 
    
-   def find_by_name(name)
-        first_name=name.split(' ')[0]
-        last_name=name.split(' ')[-1]
-        return Representative.where(first_name: first_name,last_name: last_name)
-   end
+
 
    private
    def sheet_params

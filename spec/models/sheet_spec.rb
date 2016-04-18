@@ -5,4 +5,8 @@ describe Sheet do
         sheet.name = "sheet"
         expect(sheet.name).to eq("sheet")
     end
+    
+    it "attachment is an .xlsx file" do
+    end
+    
 end
