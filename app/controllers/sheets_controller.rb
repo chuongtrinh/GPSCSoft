@@ -19,10 +19,12 @@ class SheetsController < ApplicationController
    def create
          if params.has_key?(:sheet)
             @sheet = Sheet.new(sheet_params)
+            @sheet.name = params[:sheet][:attachment].original_filename
                if @sheet.save
                   if uploadFile(params[:sheet][:attachment])
                      # redirect_to sheets_path, notice: "The sheet has been uploaded."
                   else
+                     @sheet.destroy
                      flash[:notice] = "The sheet was created unsuccessfully (The file you uploaded is empty)"
                      render "new"
                   end
@@ -78,6 +80,7 @@ class SheetsController < ApplicationController
                     
             # This should be called after determining the type of sheet file 
             # This should belong to attendance sheet
+            
             if (validate_attendance_sheet(2..spreadsheet.last_row))
                redirect_to sheets_path, notice: "One or more entries' names in swipe card sheet are missing"
             end
@@ -97,9 +100,9 @@ class SheetsController < ApplicationController
             # update the Department model
             update_state(all_department_states)
             redirect_to sheet_path, notice: "The attendance sheet has been uploaded."
+            
             # filetype is registration
             when '2' 
-
          
             (2..spreadsheet.last_row).each do |i|
                row = Hash[[arranged_header, spreadsheet.row(i)].transpose]
