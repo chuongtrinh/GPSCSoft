@@ -25,7 +25,7 @@ To watch some training videos, visit http://www.youtube.com/user/c9ide
 
 
 ---------------How to commit to GitHub-----------------------------------------------
-git pull (git pull <remote>->git@github.com:roguelider/gpscsoft.git <branch>->master)
+git pull (git pull <remote>->git@github.com:roguelider/gpscsoft.git <branch>->master) git pull git@github.com:roguelider/gpscsoft.git master
 git add .
 git commit -m "comment"
 git push (git push -u <remote>->origin <branch>->master)
