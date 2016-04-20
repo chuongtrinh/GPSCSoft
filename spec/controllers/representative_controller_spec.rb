@@ -23,5 +23,20 @@ RSpec.describe RepresentativeController, type: :controller do
         expect(@representative.email).to eq("blarg@blarg.com")
         expect(@representative.uin).to eq("123")
     end
+    
+    before do
+        @r=Representative.new
+        @r.first_name="juan"
+        @r.last_name="perez"
+        @r.uin="333"
+        @r.save!
+        
+    end
+    it "find representatives by name" do
+        @representative=RepresentativeController.find_by_name "juan perez"
+        expect(@representative.first_name).to eq("juan")
+        expect(@representative.last_name).to eq("perez")
+        expect(@representative.uin).to eq("333")
+    end
 
 end

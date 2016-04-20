@@ -12,7 +12,7 @@ describe Department do
         expect(department.academic_unit_name).to eq("biology")
     end
     
-    it "is assigned to state 1" do
+    it "is assigned to states 1 and 2" do
         department = Department.new
         department.previous_state = "1"
         department.current_state = "2"
