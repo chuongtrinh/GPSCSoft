@@ -32,8 +32,6 @@ ActiveRecord::Schema.define(version: 20160417011505) do
     t.integer  "department_id"
   end
 
-  add_index "representatives", ["department_id"], name: "index_representatives_on_department_id"
-
   create_table "sheets", force: :cascade do |t|
     t.string   "name"
     t.string   "attachment"

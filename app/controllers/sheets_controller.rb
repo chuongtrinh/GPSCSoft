@@ -8,7 +8,10 @@ class SheetsController < ApplicationController
       @sheets = Sheet.all
       @representatives=Representative.all
       @departments=Department.all
-
+      respond_to do |format|
+      format.html
+      format.csv { send_data DepartmentController.downloadcsv }
+      end
 
    end
    
