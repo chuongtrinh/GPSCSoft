@@ -87,12 +87,19 @@ class SheetsController < ApplicationController
                # Initialize department states table 
                all_department_states = DepartmentController.initialize_states
                
+               # List for names that do not find a match in representitave database
+               name_notfound = []
+               
                # update the states in temporary states table 
-               all_department_states = RepresentativeController.update_all_attending_representatives(spreadsheet,all_department_states)
+               all_department_states = RepresentativeController.update_all_attending_representatives(spreadsheet, all_department_states, name_notfound)
  
-               # update the Department model after finalizing
-               DepartmentController.update_all_department_states(all_department_states)
-            
+               if name_notfound.nil?
+                  # update the Department model after finalizing
+                  DepartmentController.update_all_department_states(all_department_states)
+               else
+                  flash[:notice] = "#{name_notfound} were not found in the representatives, please add them in the representitve before uploading attendance file"
+                  render "new"
+               end
                # redirect_to sheets_path, notice: "The attendance sheet has been uploaded."
             
             # filetype is registration

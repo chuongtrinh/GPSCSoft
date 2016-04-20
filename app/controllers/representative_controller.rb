@@ -17,14 +17,14 @@ class RepresentativeController < ApplicationController
 
     end
     
-    def update_all_attending_representatives(spreadsheet, all_department_states)
+    def update_all_attending_representatives(spreadsheet, all_department_states, name_notfound)
       (2..spreadsheet.last_row).each do |i| 
          row  = spreadsheet.row(i)
          # all representatives here should be considered as attendance
          @representative = RepresentativeController.find_by_name(row[0])
 
          if @representative.nil? 
-            flash[:notice] = "#{row[0]} is not in the registration sheet"
+            name_notfound.push(row[0])
          else
             all_department_states[@representative.department_id] = 1
          end
