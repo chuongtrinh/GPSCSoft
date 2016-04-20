@@ -44,7 +44,7 @@ class SheetsController < ApplicationController
       redirect_to sheets_path, notice:  "The sheet #{@sheet.name} has been deleted."
    end
    
-   def self.open_spreadsheet(file)
+   def open_spreadsheet(file)
       case File.extname(file.original_filename)
          when ".xls" then Roo::Excel.new(file.path)
          when ".xlsx" then Roo::Excelx.new(file.path)
@@ -66,7 +66,7 @@ class SheetsController < ApplicationController
    end
    
    def uploadFile(file)
-         spreadsheet = SheetsController.open_spreadsheet(file)
+         spreadsheet = open_spreadsheet(file)
          if is_empty spreadsheet
             return nil
          end
@@ -94,7 +94,7 @@ class SheetsController < ApplicationController
                
                # update the states in temporary states table 
                all_department_states = RepresentativeController.update_all_attending_representatives(spreadsheet, all_department_states, list_of_not_found_name)
- 
+
                if list_of_not_found_name.nil? || list_of_not_found_name.empty?
                   # update the Department model after finalizing
                   DepartmentController.update_all_department_states(all_department_states)

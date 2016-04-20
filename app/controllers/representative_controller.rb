@@ -29,5 +29,6 @@ class RepresentativeController < ApplicationController
             all_department_states[@representative.department_id] = 1
          end
       end
+      return all_department_states
     end
 end

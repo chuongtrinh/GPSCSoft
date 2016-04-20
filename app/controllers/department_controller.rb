@@ -37,7 +37,7 @@ class DepartmentController < ApplicationController
     end
   
     def self.update_all_department_states(all_department_states)
-      all_department_states.each do |key,state_val|
+        all_department_states.each do |key,state_val|
          @department = Department.find_by_id(key);
          @department.previous_state = @department.current_state
          case @department.current_state
@@ -64,6 +64,7 @@ class DepartmentController < ApplicationController
          end
          @department.save!
       end
+      return all_department_states
     end
    
 end
