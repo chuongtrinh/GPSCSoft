@@ -27,7 +27,7 @@ class SheetsController < ApplicationController
                # redirect_to sheets_path, notice: "The sheet has been uploaded."
             else
                @sheet.destroy
-               flash[:notice] = "The sheet was created unsuccessfully (The file you uploaded is empty)"
+               flash[:notice] = "The sheet was created unsuccessfully (The file you uploaded has wrong type or is empty)"
                render "new"
             end
          else
@@ -50,8 +50,7 @@ class SheetsController < ApplicationController
          when ".xlsx" then Roo::Excelx.new(file.path)
          when ".csv" then Roo::CSV.new(file.path)
          else 
-            flash[:notice] = "Unknown file type: #{file.original_filename}"
-            render "new"
+            return false
       end
    end
 
@@ -67,8 +66,8 @@ class SheetsController < ApplicationController
    
    def uploadFile(file)
          spreadsheet = open_spreadsheet(file)
-         if is_empty spreadsheet
-            return nil
+         if !spreadsheet || (is_empty spreadsheet)
+             return nil
          end
 
          header = spreadsheet.row(1)
