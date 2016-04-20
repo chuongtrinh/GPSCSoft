@@ -36,7 +36,7 @@ class DepartmentController < ApplicationController
       return all_department_states
     end
   
-    def update_all_department_states(all_department_states)
+    def self.update_all_department_states(all_department_states)
       all_department_states.each do |key,state_val|
          @department = Department.find_by_id(key);
          @department.previous_state = @department.current_state

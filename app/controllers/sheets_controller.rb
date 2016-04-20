@@ -47,9 +47,11 @@ class SheetsController < ApplicationController
    def self.open_spreadsheet(file)
       case File.extname(file.original_filename)
          when ".xls" then Roo::Excel.new(file.path)
-            when ".xlsx" then Roo::Excelx.new(file.path)
-               when ".csv" then Roo::CSV.new(file.path)
-            else raise "Unknown file type: #{file.original_filename}"
+         when ".xlsx" then Roo::Excelx.new(file.path)
+         when ".csv" then Roo::CSV.new(file.path)
+         else 
+            flash[:notice] = "Unknown file type: #{file.original_filename}"
+            render "new"
       end
    end
 
@@ -88,16 +90,17 @@ class SheetsController < ApplicationController
                all_department_states = DepartmentController.initialize_states
                
                # List for names that do not find a match in representitave database
-               name_notfound = []
+               list_of_not_found_name = []
                
                # update the states in temporary states table 
-               all_department_states = RepresentativeController.update_all_attending_representatives(spreadsheet, all_department_states, name_notfound)
+               all_department_states = RepresentativeController.update_all_attending_representatives(spreadsheet, all_department_states, list_of_not_found_name)
  
-               if name_notfound.nil?
+               if list_of_not_found_name.nil? || list_of_not_found_name.empty?
                   # update the Department model after finalizing
                   DepartmentController.update_all_department_states(all_department_states)
+                  redirect_to sheets_path, notice: "The attendance sheet has been uploaded."
                else
-                  flash[:notice] = "#{name_notfound} were not found in the representatives, please add them in the representitve before uploading attendance file"
+                  flash[:notice] = "#{list_of_not_found_name} were not found in the representatives, please add them in the representitve before uploading attendance file"
                   render "new"
                end
                # redirect_to sheets_path, notice: "The attendance sheet has been uploaded."

@@ -17,7 +17,7 @@ class RepresentativeController < ApplicationController
 
     end
     
-    def update_all_attending_representatives(spreadsheet, all_department_states, name_notfound)
+    def self.update_all_attending_representatives(spreadsheet, all_department_states, name_notfound)
       (2..spreadsheet.last_row).each do |i| 
          row  = spreadsheet.row(i)
          # all representatives here should be considered as attendance
