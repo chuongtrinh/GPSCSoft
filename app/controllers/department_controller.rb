@@ -47,6 +47,12 @@ class DepartmentController < ApplicationController
         all_department_states.each do |key,state_val|
          @department = Department.find_by_id(key);
          @department.previous_state = @department.current_state
+         if @department.meeting_attendance.nil? 
+            @department.meeting_attendance = state_val.to_s
+         else
+            @department.meeting_attendance = @department.meeting_attendance.insert(-1, state_val.to_s)
+         end
+         
          case @department.current_state
             when '1'
                if state_val == 0

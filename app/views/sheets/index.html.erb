@@ -66,6 +66,7 @@
     <th>college</th>
     <th>current_state</th>
     <th>previous_state</th>
+    <th>meeting_attendance</th>
   </tr>          
 <% @departments.each do |d| %>
   <tr>
@@ -74,5 +75,6 @@
     <td><%= d.college %></td>
     <td><%= d.current_state %></td>
     <td><%= d.previous_state %></td>
+    <th><%= d.meeting_attendance %></th>
   </tr>
 <% end %>
