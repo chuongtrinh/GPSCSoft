@@ -5,6 +5,7 @@ class DepartmentController < ApplicationController
       @departments.each do |department|
         department.destroy
       end
+      flash[:notice] = "All departments and representatives are deleted!"
       redirect_to sheets_path
     end
     
