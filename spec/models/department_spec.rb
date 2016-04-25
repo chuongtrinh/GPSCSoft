@@ -16,8 +16,10 @@ describe Department do
         department = Department.new
         department.previous_state = "1"
         department.current_state = "2"
+        department.meeting_attendance = "1"
         expect(department.previous_state).to eq("1")
         expect(department.current_state).to eq("2")
+        expect(department.meeting_attendance).to eq("1")
     end
     
     it "is saved to database" do
