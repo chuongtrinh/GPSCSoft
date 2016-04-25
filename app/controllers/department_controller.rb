@@ -1,5 +1,12 @@
 class DepartmentController < ApplicationController
     
+    def reset
+      @departments=Department.all
+      @departments.each do |department|
+        department.destroy
+      end
+      redirect_to sheets_path
+    end
     
     def self.update_department row
       
