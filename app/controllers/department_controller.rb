@@ -24,24 +24,7 @@ class DepartmentController < ApplicationController
       end
       
     end
-   def self.downloadcsv
-        state_to_eligibility={'1'=>"yes",'2'=>"yes",'3'=>"no",'4'=>"no"}
-        CSV.generate do |csv|
-          
-          departments=Department.all
-          meetingnumbers=departments[0].meeting_attendance.size
-          meetingheader=[]
-          (1..meetingnumbers).each do |number|
-              meetingheader.push("meetting#{number}")
-          end
-          csv << ["academic_unit_name","eliglibility"]+meetingheader
-          departments.each do |department|
-            attendance=department.meeting_attendance.split(//)
-            csv << [department.academic_unit_name,state_to_eligibility[department.current_state]]+attendance
-          end
-        end
-    end
-  
+    
     def self.initialize_states
       all_department_states = {}
       # initialize all states 
