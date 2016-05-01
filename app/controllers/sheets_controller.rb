@@ -155,7 +155,10 @@ class SheetsController < ApplicationController
    end
       def downloadcsv
         state_to_eligibility={'1'=>"yes",'2'=>"yes",'3'=>"no",'4'=>"no"}
-        departments=Department.all 
+        departments=Department.all
+        if departments[0].nil?
+        flash[:notice] = "You need upload registration and attendance file before downloading"
+        else
         if departments[0].meeting_attendance.nil?
         flash[:notice] = "You need upload registration and attendance file before downloading"
         else
@@ -170,6 +173,7 @@ class SheetsController < ApplicationController
             attendance=department.meeting_attendance.split(//)
             csv << [department.academic_unit_name,state_to_eligibility[department.current_state]]+attendance
           end
+       end
         end
     end
     end
