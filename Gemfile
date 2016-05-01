@@ -26,7 +26,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'tzinfo-data', platforms: [:mingw,:mswin,:x64_mingw,:jruby]
 gem 'pg'
 gem 'carrierwave', '~> 0.9'
-gem 'bootstrap-sass','~> 2.3.2'
+gem 'bootstrap-sass', '~> 3.2.0'
 gem 'roo'
 gem "iconv", "~> 1.0.3"
 gem 'roo-xls'
