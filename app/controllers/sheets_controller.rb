@@ -156,8 +156,8 @@ class SheetsController < ApplicationController
       def downloadcsv
         state_to_eligibility={'1'=>"yes",'2'=>"yes",'3'=>"no",'4'=>"no"}
         departments=Department.all 
-        if departments[0].nil?
-        flash[:notice] = "You need upload registration file before downloading"
+        if departments[0].meeting_attendance.nil?
+        flash[:notice] = "You need upload registration and attendance file before downloading"
         else
         CSV.generate do |csv|
           meetingnumbers=departments[0].meeting_attendance.size
