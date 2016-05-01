@@ -15,7 +15,8 @@
    </div>
 <% end %>
 
-<div class = "well">
+<div class = "container">
+     <div class="jumbotron">
    <%= form_for @sheet, html: { multipart: true } do |f| %>
       
       <div class="attachment">
@@ -27,4 +28,5 @@
                <%= f.submit "Save", class: "btn btn-primary" %>
       </div>
    <% end %>
+   </div>
 </div>

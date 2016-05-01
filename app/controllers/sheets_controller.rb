@@ -69,6 +69,7 @@ class SheetsController < ApplicationController
             csv << [department.academic_unit_name,state_to_eligibility[department.current_state]]+attendance
           end
         end
+        
     end
    def identify_spreadsheet_type(file)
       if file.original_filename =~ /^Attendance Swipe Data.\S+$/

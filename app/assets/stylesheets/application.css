@@ -16,6 +16,7 @@
  
 body{
    background-color: #777 !important;
+   font-size: 18px !important;
 }
 
 .main {
@@ -29,7 +30,7 @@ div.container-fluid {
     
 }
 .lockup_icon {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 row.main-content{
      background-color: #ffffff;
@@ -40,4 +41,9 @@ row.main-content{
 }
 .jumbotron {
     margin-top: 10px;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+    color: #fff;
+    background-color: #337ab7 !important;
 }

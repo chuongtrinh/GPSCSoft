@@ -11,51 +11,47 @@
             Some instructionsSome instructionsSome instructionsSome instructionsSome instructions
             Some instructionsSome instructionsSome instructionsSome instructionsSome instructions</p> 
     </div>
-          
+
     <div class="jumbotron">
-      
-<br />
-
-
-
-<%= link_to "New Sheet", new_sheet_path, class: "btn btn-primary" %>
-<br/>
-  <%= link_to 'Reset', department_reset_path,
-                      method: :get,
-                      data: { confirm: 'This action will remove all data in department and representative. Do you want to confirm the action? ' } %>
-<br />
-<br />
-
-
-
-   <p>
-  Download the eliglibility:
-  <%= link_to "Download CSV", sheets_path(format: "csv"), :id => "download_csv" %> 
-  </p>
-
-
- <table class="table" id="department">
-  <thead>
-      <tr>
-        <th>Academic_unit_name</th>
-        <th>College</th>
-        <th>Eligibility</th>
-    </tr>
-  </thead>      
-  <tbody>
-    <% @departments.each do |dept| %>
-      <tr>
-        <td><%= dept.academic_unit_name %></td>
-        <td><%= dept.college %></td>
-        <td>
-            <% if dept.current_state == '1' %>
-                <p>Yes</p>
-             <% else %>
-                <p>No</p>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Choose following options to begin:</h2>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <ul class="nav nav-pills nav-justified">
+              <li role="presentation"><%= link_to "Upload Attendance or Registration Sheet", new_sheet_path %></li>
+              <li role="presentation"><%= link_to "Download Eligibility Excel Sheet", sheets_path(format: "csv"), :id => "download_csv" %> </li>
+              <li role="presentation"><%= link_to 'Erase everything', department_reset_path, method: :get, data: { confirm: 'This action will remove all data in department and representative. Do you want to confirm the action? ' } %></li>
+            </ul>
+        </div>
+        <br/>
+        <div class="row">
+             <table class="table table-bordered table-sm" id="department">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>Academic_unit_name</th>
+                    <th>College</th>
+                    <th>Eligibility</th>
+                </tr>
+              </thead>      
+              <tbody>
+                <% @departments.each do |dept| %>
+                  <tr>
+                    <td><%= dept.academic_unit_name %></td>
+                    <td><%= dept.college %></td>
+                    <td>
+                        <% if dept.current_state == '1' %>
+                            <p>Yes</p>
+                         <% else %>
+                            <p>No</p>
+                        <% end %>
+                    </td>
+                       
+                  </tr>
             <% end %>
-        </td>
-           
-      </tr>
-  </tbody>
-<% end %>
+              </tbody>
+            </table>
+        </div>
 </div>
