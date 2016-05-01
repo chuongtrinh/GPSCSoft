@@ -42,7 +42,7 @@
                     <td><%= dept.academic_unit_name %></td>
                     <td><%= dept.college %></td>
                     <td>
-                        <% if dept.current_state == '1' %>
+                        <% if dept.current_state == '1' or dept.current_state == '2'   %>
                             <p>Yes</p>
                          <% else %>
                             <p>No</p>
