@@ -34,3 +34,10 @@ div.container-fluid {
 row.main-content{
      background-color: #ffffff;
 }
+
+.attachment label{
+    font-size: 20px;
+}
+.jumbotron {
+    margin-top: 10px;
+}

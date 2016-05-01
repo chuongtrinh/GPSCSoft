@@ -13,43 +13,25 @@
     </div>
           
     <div class="jumbotron">
-        <%= link_to 'Reset', department_reset_path,
-                      method: :get,
-                      data: { confirm: 'This action will remove all data in department and representative. Do you want to confirm the action? ' } %>
+      
 <br />
 
 
 
 <%= link_to "New Sheet", new_sheet_path, class: "btn btn-primary" %>
+<br/>
+  <%= link_to 'Reset', department_reset_path,
+                      method: :get,
+                      data: { confirm: 'This action will remove all data in department and representative. Do you want to confirm the action? ' } %>
 <br />
 <br />
 
 
-<table class = "table table-bordered table-striped">
-   <thead>
-      <tr>
-         <th>Name</th>
-         <th>Download Link</th>
-         <th> </th>
-      </tr>
-   </thead>
-   
-   <tbody>
-      <% @sheets.each do |sheet| %>
-         
-         <tr>
-            <td><%= sheet.name %></td>
-            <td><%= link_to "Download sheet", sheet.attachment_url %></td>
-            <td><%= button_to "Delete",  sheet, method: :delete, class: "btn btn-danger", confirm: "Are you sure that you wish to delete #{sheet.name}?" %></td>
-         </tr>
-         
-      <% end %>
-   </tbody>
+
    <p>
   Download the eliglibility:
   <%= link_to "Download CSV", sheets_path(format: "csv"), :id => "download_csv" %> 
   </p>
-</table>
 
 
  <table class="table" id="department">
