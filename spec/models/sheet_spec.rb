@@ -6,7 +6,4 @@ describe Sheet do
         expect(sheet.name).to eq("sheet")
     end
     
-    it "attachment is an .xlsx file" do
-    end
-    
 end

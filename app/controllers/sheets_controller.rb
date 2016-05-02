@@ -29,16 +29,15 @@ class SheetsController < ApplicationController
         redirect_to sheets_path
         flash[:notice] = "You need upload registration and attendance file before downloading"
         
-         else
-         if departments[0].meeting_attendance.nil?
-         redirect_to sheets_path
-         flash[:notice] = "You need upload registration and attendance file before downloading"
-         else
-         send_data downloadcsv
-         
-         end
-         end
-      }
+        else
+            if departments[0].meeting_attendance.nil?
+               redirect_to sheets_path
+               flash[:notice] = "You need upload registration and attendance file before downloading"
+            else
+               send_data downloadcsv
+            end
+        end
+         }
       end
 
    end
@@ -155,6 +154,24 @@ class SheetsController < ApplicationController
       end
       return true
    end
+   
+   def downloadcsv
+        state_to_eligibility={'1'=>"yes",'2'=>"yes",'3'=>"no",'4'=>"no"}
+        departments=Department.all
+        
+        CSV.generate do |csv|
+          meetingnumbers=departments[0].meeting_attendance.size
+          meetingheader=[]
+          (1..meetingnumbers).each do |number|
+              meetingheader.push("meetting#{number}")
+          end
+          csv << ["academic_unit_name","eliglibility"]+meetingheader
+          departments.each do |department|
+            attendance=department.meeting_attendance.split(//)
+            csv << [department.academic_unit_name,state_to_eligibility[department.current_state]]+attendance
+          end
+       end
+   end
 
    private
    def sheet_params
@@ -180,22 +197,4 @@ class SheetsController < ApplicationController
    def is_empty spreadsheet
       return !spreadsheet.first_row
    end
-   
-   def downloadcsv
-        state_to_eligibility={'1'=>"yes",'2'=>"yes",'3'=>"no",'4'=>"no"}
-        departments=Department.all
-        
-        CSV.generate do |csv|
-          meetingnumbers=departments[0].meeting_attendance.size
-          meetingheader=[]
-          (1..meetingnumbers).each do |number|
-              meetingheader.push("meetting#{number}")
-          end
-          csv << ["academic_unit_name","eliglibility"]+meetingheader
-          departments.each do |department|
-            attendance=department.meeting_attendance.split(//)
-            csv << [department.academic_unit_name,state_to_eligibility[department.current_state]]+attendance
-          end
-       end
-        end
 end

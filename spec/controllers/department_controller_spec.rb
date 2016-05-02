@@ -20,6 +20,7 @@ RSpec.describe DepartmentController, type: :controller do
             @d.meeting_attendance = "1"
             @d.save!
     end
+    
     it "ignore update departments table with a existed department" do
         DepartmentController.update_department Hash["academic_unit_name","Evil academic unit 101",
                                                             "college","Not as Evil College"]
@@ -31,17 +32,20 @@ RSpec.describe DepartmentController, type: :controller do
         expect(@department.meeting_attendance).to eq("1")
     end
 
-    it "initialize states" do
-        @all_department_states=DepartmentController.initialize_states
-        expect(@all_department_states).not_to be(nil)
+    describe "initialize states" do
+        it "initialize all states" do
+            @all_department_states=DepartmentController.initialize_states
+            expect(@all_department_states).not_to be(nil)
+        end
     end
+    
     
     describe "GET #reset" do
         it "returns http success" do
           get :reset
           expect(response).to have_http_status(:found)
         end
-    end    
+    end
     
     describe "update_all_department_states" do
     
