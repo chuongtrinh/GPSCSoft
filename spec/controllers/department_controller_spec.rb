@@ -55,8 +55,28 @@ RSpec.describe DepartmentController, type: :controller do
             @d.college="Evil College"
             @d.previous_state="1"
             @d.current_state="2"
-            @d.meeting_attendance = "1"
+            @d.meeting_attendance = nil
             @d.save!
+        end
+        
+        it "add meeting_attendance information when it doesn't exist" do
+            @department = Department.find_by_academic_unit_name "Evil academic unit 102" 
+            @id = @department.id
+            @Hash = {@id => 1}
+            DepartmentController.update_all_department_states(@Hash)
+            @d = Department.find_by_academic_unit_name "Evil academic unit 102"
+            expect(@d.meeting_attendance).to eq("1")
+        end
+        
+        it "modify meeting_attendance information when it exist" do
+            @department = Department.find_by_academic_unit_name "Evil academic unit 102"
+            @department.meeting_attendance="1"
+            @department.save!
+            @id = @department.id
+            @Hash = {@id => 1}
+            DepartmentController.update_all_department_states(@Hash)
+            @d = Department.find_by_academic_unit_name "Evil academic unit 102"
+            expect(@d.meeting_attendance).to eq("11")
         end
         
         it "update all departments eligibility" do
