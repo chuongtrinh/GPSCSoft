@@ -8,6 +8,19 @@ class SheetsController < ApplicationController
       @sheets = Sheet.all
       @representatives=Representative.all
       @departments=Department.all
+      
+      
+       if params[:sorting] == "academic_unit_name"
+         @departments = Department.order "academic_unit_name"
+         @academic_unit_name_header = "hilite"
+       elsif params[:sorting] == "college"
+         @departments = Department.order "college"
+         @college_header = "hilite"
+       elsif params[:sorting] == "eligibility"
+         @departments = Department.order "current_state"
+         @eligibility_header = "hilite"       
+       end
+    
       respond_to do |format|
       format.html
       format.csv { send_data downloadcsv }
@@ -33,7 +46,6 @@ class SheetsController < ApplicationController
          else
             @sheet = Sheet.new
             flash[:notice] = "The sheet was created unsuccessfully (Missing upload file)"
-            print params
             render "new"
          end
    end
@@ -153,30 +165,30 @@ class SheetsController < ApplicationController
    def is_empty spreadsheet
       return !spreadsheet.first_row
    end
-      def downloadcsv
-        state_to_eligibility={'1'=>"yes",'2'=>"yes",'3'=>"no",'4'=>"no"}
-        departments=Department.all
-        if departments[0].nil?
-        flash[:notice] = "You need upload registration and attendance file before downloading"
-        else
-        if departments[0].meeting_attendance.nil?
-        flash[:notice] = "You need upload registration and attendance file before downloading"
-        else
-        CSV.generate do |csv|
-          meetingnumbers=departments[0].meeting_attendance.size
-          meetingheader=[]
-          (1..meetingnumbers).each do |number|
-              meetingheader.push("meetting#{number}")
-          end
-          csv << ["academic_unit_name","eliglibility"]+meetingheader
-          departments.each do |department|
-            attendance=department.meeting_attendance.split(//)
-            csv << [department.academic_unit_name,state_to_eligibility[department.current_state]]+attendance
-          end
-       end
-        end
-    end
-    end
-  
    
+   def downloadcsv
+      state_to_eligibility={'1'=>"yes",'2'=>"yes",'3'=>"no",'4'=>"no"}
+      departments=Department.all
+        
+      if departments[0].nil?
+            flash[:notice] = "You need upload registration and attendance file before downloading"
+      else if departments[0].meeting_attendance.nil?
+            flash[:notice] = "You need upload registration and attendance file before downloading"
+      else
+         CSV.generate do |csv|
+               meetingnumbers=departments[0].meeting_attendance.size
+                meetingheader=[]
+                (1..meetingnumbers).each do |number|
+                    meetingheader.push("meetting#{number}")
+               end
+            
+               csv << ["academic_unit_name","eliglibility"]+meetingheader
+               departments.each do |department|
+                  attendance=department.meeting_attendance.split(//)
+                  csv << [department.academic_unit_name,state_to_eligibility[department.current_state]]+attendance
+               end
+            end
+         end
+      end
+   end
 end

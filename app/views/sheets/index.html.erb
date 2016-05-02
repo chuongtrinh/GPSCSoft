@@ -6,10 +6,66 @@
 
 
     <div class="jumbotron">
-            <h1>Travel Grant Award Eligibility</h1> 
-            <p>Some instructionsSome instructionsSome instructionsSome instructionsSome instructionsSome instructions
-            Some instructionsSome instructionsSome instructionsSome instructionsSome instructions
-            Some instructionsSome instructionsSome instructionsSome instructionsSome instructions</p> 
+            <h1>Department Scholarship Eligibility</h1> 
+            <br/>
+            <br/>
+          <div id="accordion" role="tablist" aria-multiselectable="false">
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingOne">
+              <h4 class="panel-title">
+                  
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  Instructions on how to begin
+                </a>
+              </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                 <ul>
+                     <li>
+                         Click on "Upload Attendance or Registration Sheet" button to start uploading files 
+                     </li>
+                     <li>
+                         The files must have correct names: (Ex: Attendance Swipe Data (####-##-##).csv, ####-#### GPSC Attendance.xlsx)
+                     </li>
+                 </ul>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingTwo">
+              <h4 class="panel-title">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Instructions on how to download eligibility sheet
+                </a>
+              </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                   <ul>
+                     <li>
+                        Click on "Download Eligibility Excel Sheet" button to start uploading files 
+                        </li>
+                    </ul>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingThree">
+              <h4 class="panel-title">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                   Instructions on when making mistakes
+                </a>
+              </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <ul>
+                    <li>
+                You can always go back from the beginning of semester by clicking "Erase Everything" button and re-upload everything again
+                        
+                    </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+
+
     </div>
 
     <div class="jumbotron">
@@ -23,17 +79,25 @@
             <ul class="nav nav-pills nav-justified">
               <li role="presentation"><%= link_to "Upload Attendance or Registration Sheet", new_sheet_path %></li>
               <li role="presentation"><%= link_to "Download Eligibility Excel Sheet", sheets_path(format: "csv"), :id => "download_csv" %> </li>
-              <li role="presentation"><%= link_to 'Erase everything', department_reset_path, method: :get, data: { confirm: 'This action will remove all data in department and representative. Do you want to confirm the action? ' } %></li>
+              <li role="presentation"><%= link_to 'Erase Everything', department_reset_path, method: :get, data: { confirm: 'This action will remove all data in department and representative. Do you want to confirm the action? ' } %></li>
             </ul>
         </div>
+    
+  
         <br/>
         <div class="row">
              <table class="table table-bordered table-sm" id="department">
                 <thead class="thead-inverse">
                 <tr>
-                    <th>Academic_unit_name</th>
-                    <th>College</th>
-                    <th>Eligibility</th>
+                    <th class="<%= @academic_unit_name_header %>"> 
+                        <%= link_to 'Academic Unit Name', sheets_path(sorting: 'academic_unit_name') , :id => 'academic_unit_name' %>
+                    </th>
+                    <th class="<%= @college_header %>">
+                         <%= link_to 'College', sheets_path(sorting: 'college') , :id => 'college' %>
+                    </th>
+                    <th class="<%= @eligibility_header %>">
+                         <%= link_to 'Eligibility', sheets_path(sorting: 'eligibility') , :id => 'eligibility' %>
+                      </th>
                 </tr>
               </thead>      
               <tbody>

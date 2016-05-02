@@ -47,3 +47,12 @@ row.main-content{
     color: #fff;
     background-color: #337ab7 !important;
 }
+
+table#department th.hilite {
+  background-color: #500000;
+
+}
+table#department th.hilite a {
+    color: white;
+
+}
