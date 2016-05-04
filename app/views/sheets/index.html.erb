@@ -50,14 +50,14 @@
             <div class="panel-heading" role="tab" id="headingThree">
               <h4 class="panel-title">
                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                   Instructions on when making mistakes
+                   Instructions on resetting data
                 </a>
               </h4>
             </div>
             <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                 <ul>
                     <li>
-                You can always go back from the beginning of semester by clicking "Erase Everything" button and re-upload everything again
+                You can always go back to the beginning of semester by clicking "Reset All" button and re-upload everything again
                         
                     </li>
                 </ul>
@@ -79,7 +79,7 @@
             <ul class="nav nav-pills nav-justified">
               <li role="presentation"><%= link_to "Upload Attendance or Registration Sheet", new_sheet_path %></li>
               <li role="presentation"><%= link_to "Download Eligibility Excel Sheet", sheets_path(format: "csv"), :id => "download_csv" %> </li>
-              <li role="presentation"><%= link_to 'Erase Everything', department_reset_path, method: :get, data: { confirm: 'This action will remove all data in department and representative. Do you want to confirm the action? ' } %></li>
+              <li role="presentation"><%= link_to 'Reset All', department_reset_path, method: :get, data: { confirm: 'This action will remove all data in department and representative. Do you want to confirm the action? ' } %></li>
             </ul>
         </div>
     

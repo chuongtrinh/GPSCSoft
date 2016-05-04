@@ -27,12 +27,12 @@ class SheetsController < ApplicationController
         departments=Department.all
         if departments[0].nil?
         redirect_to sheets_path
-        flash[:notice] = "You need upload registration and attendance file before downloading"
+        flash[:notice] = "You need to upload registration and attendance file before downloading"
         
         else
             if departments[0].meeting_attendance.nil?
                redirect_to sheets_path
-               flash[:notice] = "You need upload registration and attendance file before downloading"
+               flash[:notice] = "You need to upload registration and attendance file before downloading"
             else
                send_data downloadcsv
             end
